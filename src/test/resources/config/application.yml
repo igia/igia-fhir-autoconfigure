@@ -1,0 +1,189 @@
+#
+# This Source Code Form is subject to the terms of the Mozilla Public License, v.
+# 2.0 with a Healthcare Disclaimer.
+# A copy of the Mozilla Public License, v. 2.0 with the Healthcare Disclaimer can
+# be found under the top level directory, named LICENSE.
+# If a copy of the MPL was not distributed with this file, You can obtain one at
+# http://mozilla.org/MPL/2.0/.
+# If a copy of the Healthcare Disclaimer was not distributed with this file, You
+# can obtain one at the project website https://github.com/igia.
+#
+# Copyright (C) 2018-2019 Persistent Systems, Inc.
+#
+
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration is used for unit/integration tests.
+#
+# More information on profiles: https://www.jhipster.tech/profiles/
+# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+    client:
+        enabled: false
+    instance:
+        appname: igia-fhir-api-example
+        instanceId: igia-fhir-api-example:${spring.application.instance-id:${random.value}}
+
+spring:
+    application:
+        name: igia-fhir-api-example
+    cache:
+        type: simple
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:h2:mem:igia-fhir-api-example;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        name:
+        username:
+        password:
+        hikari:
+            auto-commit: false
+    jpa:
+        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        database: H2
+        open-in-view: false
+        show-sql: false
+        hibernate:
+            ddl-auto: none
+            naming:
+                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        properties:
+            hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: true
+            hibernate.hbm2ddl.auto: validate
+    liquibase:
+        contexts: test
+    mail:
+        host: localhost
+    messages:
+        basename: i18n/messages
+    mvc:
+        favicon:
+            enabled: false
+    thymeleaf:
+        mode: HTML
+
+security:
+    oauth2:
+    # client configuration needed : for condition in Spring Boot
+        client:
+            access-token-uri: http://DO_NOT_CALL:9080/auth/realms/igia/protocol/openid-connect/token
+            user-authorization-uri: http://DO_NOT_CALL:9080/auth/realms/igia/protocol/openid-connect/auth
+            client-id: web_app
+            client-secret: web_app
+            scope: openid profile email
+        resource:
+            user-info-uri: http://DO_NOT_CALL:9080/auth/realms/igia/protocol/openid-connect/userinfo
+
+server:
+    port: 10344
+    address: localhost
+
+info:
+    project:
+        version: #project.version#
+
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+jhipster:
+    async:
+        core-pool-size: 1
+        max-pool-size: 50
+        queue-capacity: 10000
+    # To test logstash appender
+    logging:
+        logstash:
+            enabled: true
+            host: localhost
+            port: 5000
+            queue-size: 512
+    mail:
+        from: test@localhost
+        base-url: http://127.0.0.1:8080
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        logs: # Reports Dropwizard metrics in the logs
+            enabled: true
+            report-frequency: 60 # in seconds
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# application:
+
+hapi:
+  fhir:
+    version: dstu3
+    server:
+      path: /api
+    rest:
+      server-name: igia-fhir-api-example
+      server-version: 0.0.1
+      implementation-description: igia Example FHIR Server
+      default-response-encoding: json
+      e-tag-support: enabled
+      default-pretty-print: true
+      exception.stacktrace: true
+    validation:
+      enabled: true
+      request-only: true
+      
+hspc:
+  platform:
+    api:
+      security:
+        # determines if security is applied at the contextPath
+        mode: secured
+#        mode: mock
+#        mode: open
+      oauth2:
+        clientId: hspc_resource_server
+        clientSecret: secret
+        scopes: openid,offline_access,launch,smart/orchestrate_launch
+    # these values are used for internal calls to the auth server
+    authorization:
+      protocol: http #https
+      host: ${AUTH_HOST:localhost}
+      port: ${AUTH_PORT:8080}
+      context: ~
+      url: ${hspc.platform.authorization.protocol}://${hspc.platform.authorization.host}:${hspc.platform.authorization.port}${hspc.platform.authorization.context}
+      authorizeUrlPath: /auth/realms/master/protocol/openid-connect/auth
+      tokenUrlPath: /auth/realms/master/protocol/smart-openid-connect/token
+      tokenCheckUrlPath: /auth/realms/master/protocol/openid-connect/token/introspect
+      userinfoUrlPath: /auth/realms/master/protocol/openid-connect/userinfo
+      smart:
+        launchUrlPath: #required by library but not implemented in auth server
+        registrationEndpointUrlPath: /auth/realms/master/clients-registrations/openid-connect
+        urisEndpointExtensionUrl: http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris
+        launchRegistrationUrl: #required by library but not implemented in auth server
+        capabilities: launch-standalone, client-public, client-confidential-symmetric, sso-openid-connect, context-standalone-patient, permission-patient, permission-offline      
+    # the manifest output should contain these values (used to allow the API to publish different auth URL than it resolves locally, ie, Docker container)
+    manifest:
+      override: ${MANIFEST_OVERRIDE:false}
+      protocol: http
+      host: ${PUBLISHED_AUTH_HOST:}
+      port: ${PUBLISHED_AUTH_PORT:}
+      context: ~
+      url: ${hspc.platform.manifest.protocol}://${hspc.platform.manifest.host}:${hspc.platform.manifest.port}${hspc.platform.manifest.context}        
