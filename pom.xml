@@ -20,12 +20,12 @@
 	<parent>
 		<groupId>io.igia</groupId>
 		<artifactId>igia-lib-parent</artifactId>
-		<version>0.3.0</version>
+		<version>0.3.2</version>
 		<relativePath>../igia-lib-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>igia-fhir-auto-configure</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.2</version>
 	<packaging>jar</packaging>
 
 	<name>igia-fhir-auto-configure</name>
