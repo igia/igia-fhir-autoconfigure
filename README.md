@@ -9,7 +9,7 @@ This library is a Spring Boot autoconfiguration library that will create a HAPI 
 <dependency>
   <groupId>io.igia</groupId>
   <artifactId>igia-fhir-auto-configure</artifactId>
-  <version>0.3.2</version>
+  <version>0.3.3</version>
 </dependency>
 
 ```
