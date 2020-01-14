@@ -12,7 +12,7 @@ hapi:
       path: /api # base path on your server for HAPI FHIR servlet
     rest: # configuration properties for HAPI RestfulServer class
       server-name: igia-fhir-api-example
-      server-version: 0.3.2
+      server-version: 0.3.3
       implementation-description: igia Example FHIR Server
       default-response-encoding: json
       e-tag-support: enabled
