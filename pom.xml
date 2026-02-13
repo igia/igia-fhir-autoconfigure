@@ -58,7 +58,7 @@
 	<properties>
 		<hapi.fhir.version>3.6.0</hapi.fhir.version>
 		<hspc.reference.version>1.10.8</hspc.reference.version>
-		<assertj.version>3.11.1</assertj.version>
+		<assertj.version>3.27.7</assertj.version>
 
 		<!-- Build properties -->
 		<scala.version>2.12.6</scala.version>
